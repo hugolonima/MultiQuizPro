@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name" translatable="false">ProMultiQuiz</string>
+    <string name="check">Check</string>
+    <string name="question">Question</string>
+    <string name="question_content">Capital of France?</string>
+    <string name="correct">You\'re right!</string>
+    <string name="wrong">You\'re wrong...</string>
+    <string name="next">Next</string>
+    <string-array name="questions">
+        <item>Capital of France?;Madrid;Roma;Barcelona;*Paris</item>
+        <item>2 + 2?;0;3;*4;5</item>
+    </string-array>
+    <integer name="correct_answer">3</integer>
+    <string name="finish">Finish</string>
+    <string name="prev">Previous</string>
+</resources>
