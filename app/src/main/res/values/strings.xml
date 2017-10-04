@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">ProMultiQuiz</string>
+    <string name="app_name" translatable="false">MultiQuizPro</string>
     <string name="check">Check</string>
     <string name="question">Question</string>
     <string name="question_content">Capital of France?</string>
@@ -9,8 +9,11 @@
     <string-array name="questions">
         <item>Capital of France?;Madrid;Roma;Barcelona;*Paris</item>
         <item>2 + 2?;0;3;*4;5</item>
+        <item>qyyiiip?;0;12314;*asdfgh;opooi</item>
     </string-array>
     <integer name="correct_answer">3</integer>
     <string name="finish">Finish</string>
     <string name="prev">Previous</string>
+    <string name="results">Results</string>
+    <string name="startOver">Start over</string>
 </resources>

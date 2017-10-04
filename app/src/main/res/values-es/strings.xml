@@ -8,4 +8,6 @@
     <string name="question">Pregunta</string>
     <string name="question_content">Capital de Francia</string>
     <string name="wrong">Te has equivocado...</string>
+    <string name="results">Resultados</string>
+    <string name="startOver">Volver a empezar</string>
 </resources>

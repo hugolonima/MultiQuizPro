@@ -1,5 +1,7 @@
 package edu.upc.eseiaat.pma.promultiquiz;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,17 +17,55 @@ public class MainActivity extends AppCompatActivity {
     private int id_answers [] = {
             R.id.answer1, R.id.answer2, R.id.answer3, R.id.answer4,
     };
-    private int correct_answer;
+
     private String[] all_questions;
-    private int current_question;
+
     private TextView question_text;
     private RadioGroup grup;
-    private boolean[] answer_is_correct;
-    private int[] answers;
     private Button btn_next;
     private Button btn_prev;
+
+    private int current_question;
+    private int correct_answer;
+    private boolean[] answer_is_correct;
+    private int[] answers;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.i("Lifecycle", "onSaveInstancestate");
+        super.onSaveInstanceState(outState);
+        outState.putInt("correct_answer", correct_answer);
+        outState.putInt("current_question", current_question);
+        outState.putBooleanArray("answer_is_correct", answer_is_correct);
+        outState.putIntArray("answer", answers);
+    }
+
+
+    @Override
+    protected void onStop() {
+        Log.i("Lifecycle", "onStop");
+        super.onStop();
+
+    }
+
+    @Override
+    protected void onStart() {
+        Log.i("Lifecycle", "onStart");
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i("Lifecycle", "onDestroy");
+        super.onDestroy();
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("Lifecycle", "oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -35,15 +75,21 @@ public class MainActivity extends AppCompatActivity {
         btn_prev = (Button) findViewById(R.id.btn_prev);
 
         all_questions = getResources().getStringArray(R.array.questions);
-        current_question=0;
-        answer_is_correct = new boolean[all_questions.length];
-        answers = new int[all_questions.length];
-        for(int i=0; i<answers.length;i++){
-            answers[i]=-1;
+        if(savedInstanceState==null){
+            startOver();
+        }else{
+            Bundle state = savedInstanceState;
+            correct_answer =state.getInt("correct_answer");
+            current_question = state.getInt("current_question");
+            answer_is_correct = state.getBooleanArray("answer_is_correct");
+             answers = state.getIntArray("answer");
+            showQuestion();
         }
+
+
+
         question_text = (TextView) findViewById(R.id.text_question);
 
-        showQuestion();
         btn_prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,19 +113,54 @@ public class MainActivity extends AppCompatActivity {
                     current_question++;
                     showQuestion();}
                 else{
-                    int correctas =0;
-                    int incorrectas =0;
-                    for(boolean b : answer_is_correct){
-                        if (b) correctas++;
-                        else incorrectas++;
-                    }
-                    String resultado =
-                            String.format("Correctas: &d -- Incorrectas &d", correctas, incorrectas);
-                    Toast.makeText(MainActivity.this,resultado, Toast.LENGTH_LONG).show();
-                    finish();
+                    checkResults();
                 }
             }
         });
+    }
+
+    private void startOver() {
+        current_question=0;
+        answer_is_correct = new boolean[all_questions.length];
+        answers = new int[all_questions.length];
+        for(int i=0; i<answers.length;i++){
+            answers[i]=-1;
+        }
+        showQuestion();
+    }
+
+    private void checkResults() {
+        int correctas =0;
+        int incorrectas =0;
+        int nocontestadas =0;
+        for(int i=0; i< all_questions.length; i++){
+            if (answer_is_correct[i]) correctas++;
+            else if (answers[i] ==-1) nocontestadas++;
+            else incorrectas++;
+        }
+        String message =
+                String.format("Correctas: &d \n Incorrectas: &d No contestadas: &d",
+                        correctas, incorrectas, nocontestadas);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.results);
+        builder.setMessage(message);
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.finish, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        builder.setNegativeButton(R.string.startOver, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            startOver();
+            }
+        });
+       builder.create().show();
+
+
     }
 
     private void checkAnswer() {
